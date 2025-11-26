@@ -15,7 +15,7 @@ class BasePage:
             name=re.compile(r"Соглашаюсь|Consent", re.IGNORECASE)
         )
         self.auth_link = self.page.get_by_role("link", name="Signup / Login")
-        self.logged_in_as_text = self.page.get_by_text(re.compile(r"Logged in as \w+")) or None
+        self.logged_in_as_text = self.page.get_by_text(re.compile(r"Logged in as \w+"))
     
     def visit(self, url: str) -> None:
         self.page.goto(f"{self.base_url}{url}")
