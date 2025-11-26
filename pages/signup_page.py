@@ -56,5 +56,6 @@ class SignUpPage(BasePage):
         self.zipcode_input.fill(self.user["zipcode"])
         self.mobile_number_input.fill(self.user["mobile_number"])
         self.create_account_button.click()
+        print("User: ", self.user)
         from pages import AccountCreatedPage
         return AccountCreatedPage(self.page, self.base_url)

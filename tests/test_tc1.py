@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, expect
+from playwright.sync_api import expect
 from pages import HomePage
 
 def test_tc1(home_page: HomePage) -> None:

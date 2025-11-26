@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import sync_playwright, Page
+from playwright.sync_api import sync_playwright
 
 @pytest.fixture(scope="session")
 def base_url() -> str:
@@ -9,7 +9,7 @@ def base_url() -> str:
 def browser_context():
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1280, "height": 720})
+        context = browser.new_context()
         yield context
         context.close()
         browser.close()

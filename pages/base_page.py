@@ -10,7 +10,10 @@ class BasePage:
     def __init__(self, page: Page, base_url: str) -> None:
         self.page = page
         self.base_url = base_url
-        self.cookies_accept_button = self.page.get_by_role("button", name="Соглашаюсь") or None
+        self.cookies_accept_button = self.page.get_by_role(
+            "button", 
+            name=re.compile(r"Соглашаюсь|Consent", re.IGNORECASE)
+        )
         self.auth_link = self.page.get_by_role("link", name="Signup / Login")
         self.logged_in_as_text = self.page.get_by_text(re.compile(r"Logged in as \w+")) or None
     
