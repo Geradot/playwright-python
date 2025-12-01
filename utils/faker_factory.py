@@ -16,7 +16,7 @@ available_countries = [
 def fake_new_user():
     return {
         "name": fake.name(),
-        "email": fake.email(),
+        "email": fake.email()+"123",
         "password": fake.password(),
         "birthday": {  
             "day": fake.day_of_month(),
@@ -33,4 +33,12 @@ def fake_new_user():
         "city": fake.city(),
         "zipcode": fake.postcode(),
         "mobile_number": fake.numerify("##########")
+    }
+    
+def fake_contact_form():
+    return {
+        "name": fake.name(),
+        "email": fake.email(),
+        "subject": fake.sentence(nb_words=6),
+        "message": fake.paragraph(nb_sentences=3)
     }

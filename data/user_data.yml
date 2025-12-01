@@ -1,0 +1,13 @@
+users:
+  existing_user:
+    name: "test_user12345"
+    email: "test_user12345@example.com"
+    password: "test_user12345"
+  
+  registration_user:
+    email: "test_user_zxcv@ex.co"
+    password: "test_user_zxcv"
+  
+  wrong_credentials:
+    email: "wrongemail@ex.co"
+    password: "wrongpassword"
