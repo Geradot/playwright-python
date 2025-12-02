@@ -1,8 +1,8 @@
 import re
 from playwright.sync_api import Page
-from typing import TYPE_CHECKING
 from utils import data_loader
 
+from typing import TYPE_CHECKING
 if TYPE_CHECKING: 
     from pages import *
 
@@ -14,13 +14,20 @@ class BasePage:
             "button", 
             name=re.compile(r"Соглашаюсь|Consent", re.IGNORECASE)
         )
+        # Header menu links
         self.products_page_link = self.page.locator("header").get_by_role("link", name="Products")
         self.auth_link = self.page.locator("header").get_by_role("link", name="Signup / Login")
         self.logout_link = self.page.locator("header").get_by_role("link", name="Logout")
         self.contact_us_link = self.page.locator("header").get_by_role("link", name="Contact us")
-        self.test_cases_link = self.page.locator("header").get_by_role("link", name="Test Cases")
+        self.cases_link = self.page.locator("header").get_by_role("link", name="Test Cases")
         
         self.logged_in_as_text = self.page.get_by_text(re.compile(r"Logged in as \w+"))
+        
+        # Footer section locators
+        self.footer_section = self.page.locator("footer")
+        self.subscribe_email_input = self.page.locator("#susbscribe_email")
+        self.subscribe_button = self.page.locator("button#subscribe")
+        self.subscribe_notification = self.page.get_by_text("You have been successfully subscribed!")
         
         # Load test data from YAML
         existing_user = data_loader.get_user('existing_user')
@@ -40,6 +47,13 @@ class BasePage:
         self.wrong_email = wrong_user.get('email', '')
         self.wrong_password = wrong_user.get('password', '')
     
+    def scroll_to_footer(self) -> None:
+        self.footer_section.scroll_into_view_if_needed()
+    
+    def subscribe_to_newsletter(self, email: str) -> None:
+        self.subscribe_email_input.fill(email)
+        self.subscribe_button.click()
+        
     def visit(self, url: str) -> None:
         self.page.goto(f"{self.base_url}{url}")
 
@@ -84,8 +98,8 @@ class BasePage:
         from pages import ContactUsPage
         return ContactUsPage(self.page, self.base_url)
     
-    def open_test_cases_page(self) -> "CasesPage":
-        self.test_cases_link.click()
+    def open_cases_page(self) -> "CasesPage":
+        self.cases_link.click()
         from pages import CasesPage
         return CasesPage(self.page, self.base_url)
 
@@ -93,3 +107,9 @@ class BasePage:
         self.products_page_link.click()
         from pages import ProductsPage
         return ProductsPage(self.page, self.base_url)
+    
+    def open_cart_page(self) -> "CartPage":
+        cart_link = self.page.locator("header").get_by_role("link", name="Cart")
+        cart_link.click()
+        from pages import CartPage
+        return CartPage(self.page, self.base_url)

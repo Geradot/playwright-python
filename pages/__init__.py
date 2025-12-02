@@ -7,7 +7,8 @@ from .delete_account_page import DeleteAccountPage
 from .contact_us_page import ContactUsPage
 from .cases_page import CasesPage
 from .products_page import ProductsPage
-from .product_item_page import ProductItemPage
+from .product_page import ProductPage
+from .cart_page import CartPage
 
 __all__ = [
     "HomePage", 
@@ -16,5 +17,6 @@ __all__ = [
     "ContactUsPage",
     "CasesPage",
     "ProductsPage",
-    "ProductItemPage",
+    "ProductPage",
+    "CartPage"
 ]

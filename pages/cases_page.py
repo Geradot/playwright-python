@@ -7,6 +7,6 @@ class CasesPage(BasePage):
     def __init__(self, page: Page, base_url: str) -> None:
         super().__init__(page, base_url)
         
-        self.heading = self.page.get_by_role("heading", name="Test Cases")
+        self.heading = self.page.locator("#form > .container > .row").get_by_text("Test Cases")
         
     

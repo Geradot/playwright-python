@@ -1,6 +1,7 @@
-import re
+import re, pytest
 from playwright.sync_api import expect
 from pages import HomePage
+from utils import data_loader
 
 def test_tc1(home_page: HomePage) -> None:
     """TC-1. Register User"""
@@ -76,22 +77,77 @@ def test_tc6(home_page: HomePage) -> None:
     
 def test_tc7(home_page: HomePage) -> None:
     """TC-7. Verify Test Cases Page"""
-    test_cases_page = home_page.open_test_cases_page()
-    expect(test_cases_page.page).to_have_url(
-        re.compile(f"{test_cases_page.PATH}$")
+    cases_page = home_page.open_cases_page()
+    expect(cases_page.page).to_have_url(
+        re.compile(f"{cases_page.PATH}$")
     )
-    expect(test_cases_page.heading).to_be_visible()
+    expect(cases_page.heading).to_be_visible()
 
 def test_tc8(home_page: HomePage) -> None:
-    """TC-8. Verify All Products and product detail page"""
+    """TC-8. Verify All Products and product detail page"""    
     products_page = home_page.open_products_page()
     expect(products_page.page).to_have_url(
         re.compile(f"{products_page.PATH}$")
     )
-    expect(products_page.product_list).to_have_count(34)
+    expect(products_page.product_list).to_have_count(products_page.expected_count_of_products)
     
-    item_page = products_page.get_an_item(1)
-    expect(item_page.page).to_have_url(
-        re.compile(f"{item_page.PATH}$")
+    product_page = products_page.get_an_item(1)
+    expect(product_page.page).to_have_url(
+        re.compile(f"{product_page.PATH}$")
     )
-    # TODO : Добавить проверки деталей товара
+    expect(product_page.product_name).to_be_visible()
+    expect(product_page.product_category).to_be_visible()
+    expect(product_page.product_price).to_be_visible()
+    expect(product_page.product_availability).to_be_visible()
+    expect(product_page.product_condition).to_be_visible()
+    expect(product_page.product_brand).to_be_visible()
+    
+def test_tc9(home_page: HomePage) -> None:
+    """TC-9. Search Product"""
+    searching_query = "Tshirt"
+    
+    import re
+    expected_results = re.compile(r"T[-\s]?Shirt", re.IGNORECASE)
+    
+    products_page = home_page.open_products_page()
+    expect(products_page.page).to_have_url(
+        re.compile(f"{products_page.PATH}$")
+    )
+    expect(products_page.product_list).to_have_count(
+        products_page.expected_count_of_products
+    )
+
+    products_page.search_product(searching_query)
+    for i in range(products_page.product_list.count()):
+        expect(products_page.product_list.nth(i)).to_contain_text(
+            expected_results
+        )
+    
+def test_tc10(home_page: HomePage) -> None:
+    """TC-10. Verify Subscription in home page"""
+    home_page.scroll_to_footer()
+    expect(home_page.footer_section).to_be_visible()
+    home_page.subscribe_to_newsletter(home_page.registration_email)
+    expect(home_page.subscribe_notification).to_be_visible()
+    
+def test_tc11(home_page: HomePage) -> None:
+    """TC-11. Verify Subscription in Cart page"""
+    cart_page = home_page.open_cart_page()
+    expect(cart_page.footer_section).to_be_visible()
+    cart_page.subscribe_to_newsletter(home_page.registration_email)
+    expect(cart_page.subscribe_notification).to_be_visible()
+    
+def test_tc12(home_page: HomePage) -> None:
+    """TC-12. Add Products in Cart"""
+    # products = data_loader.get_products()[:2]
+    
+    products_page = home_page.open_products_page()
+    products_page.scroll_to_products()
+    products_page.add_product_to_cart(1)
+    products_page.click_continue_shopping()
+    products_page.add_product_to_cart(2)
+    
+    cart_page = products_page.click_view_cart()
+    cart_page.page.wait_for_timeout(2000)
+    assert cart_page.are_products_in_cart("Blue Top", "Men Tshirt")
+    
