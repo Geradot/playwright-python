@@ -2,10 +2,6 @@ from playwright.sync_api import Page
 from pages import BasePage
 from components import *
 
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from pages import ProductPage, CartPage
-
 class ProductsPage(BasePage):
     PATH = "/products"
 
