@@ -24,7 +24,7 @@ This is a comprehensive test automation framework built with Playwright for Pyth
 ### 1. Clone the Repository
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/Geradot/playwright-python.git
 cd playwright-python
 ```
 
