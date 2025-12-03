@@ -24,7 +24,7 @@ This is a comprehensive test automation framework built with Playwright for Pyth
 ### 1. Clone the Repository
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/Geradot/playwright-python.git
 cd playwright-python
 ```
 
@@ -156,4 +156,3 @@ Test data is managed through YAML files in the `data/` directory and loaded via 
 
 - Easy data maintenance
 - Separation of test logic and test data
-- Support for multiple user profiles and test scenarios
