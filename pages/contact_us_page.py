@@ -26,20 +26,17 @@ class ContactUsPage(BasePage):
         # Wait for page to be fully loaded
         self.page.wait_for_load_state("domcontentloaded")
         self.page.wait_for_load_state("networkidle")
-        
         user = fake_contact_form()
         
         self.name_input.fill(user["name"])
         self.email_input.fill(user["email"])
         self.subject_input.fill(user["subject"])
         self.message_textarea.fill(user["message"])
-        
         project_root = Path(__file__).parent.parent
         file_path = project_root / "data" / "user_data.yml"
         
         if file_path.exists():
             self.upload_file_input.set_input_files(str(file_path))
-        
         # Handle dialog and click submit
         self.page.once("dialog", lambda dialog: dialog.accept())
         self.submit_button.click()

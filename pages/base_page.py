@@ -55,7 +55,14 @@ class BasePage:
         self.subscribe_button.click()
         
     def visit(self, url: str) -> None:
-        self.page.goto(f"{self.base_url}{url}")
+        target = f"{self.base_url}{url}"
+        try:
+            self.page.goto(target, wait_until="domcontentloaded", timeout=60_000)
+            self.page.wait_for_load_state("networkidle")
+        except Exception:
+            # Retry once with longer timeout to mitigate transient network slowness
+            self.page.goto(target, wait_until="domcontentloaded", timeout=120_000)
+            self.page.wait_for_load_state("networkidle")
 
     def accept_cookies(self) -> None:
         btn = self.cookies_accept_button

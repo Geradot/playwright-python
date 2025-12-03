@@ -1,4 +1,4 @@
-import re, pytest
+import re
 from playwright.sync_api import expect
 from pages import HomePage
 from utils import data_loader
@@ -91,7 +91,7 @@ def test_tc8(home_page: HomePage) -> None:
     )
     expect(products_page.product_list).to_have_count(products_page.expected_count_of_products)
     
-    product_page = products_page.get_an_item(1)
+    product_page = products_page.get_product(data_loader.get_product(0)["id"])
     expect(product_page.page).to_have_url(
         re.compile(f"{product_page.PATH}$")
     )
@@ -104,9 +104,8 @@ def test_tc8(home_page: HomePage) -> None:
     
 def test_tc9(home_page: HomePage) -> None:
     """TC-9. Search Product"""
-    searching_query = "Tshirt"
+    searching_query = data_loader.get_product(1)["name"][:5]  # "Tshirt"
     
-    import re
     expected_results = re.compile(r"T[-\s]?Shirt", re.IGNORECASE)
     
     products_page = home_page.open_products_page()
@@ -139,15 +138,20 @@ def test_tc11(home_page: HomePage) -> None:
     
 def test_tc12(home_page: HomePage) -> None:
     """TC-12. Add Products in Cart"""
-    # products = data_loader.get_products()[:2]
+    products = data_loader.get_products()[:2]
     
     products_page = home_page.open_products_page()
     products_page.scroll_to_products()
-    products_page.add_product_to_cart(1)
+    products_page.add_product_to_cart(products[0]["id"])
     products_page.click_continue_shopping()
-    products_page.add_product_to_cart(2)
+    products_page.add_product_to_cart(products[1]["id"])
     
     cart_page = products_page.click_view_cart()
-    cart_page.page.wait_for_timeout(2000)
-    assert cart_page.are_products_in_cart("Blue Top", "Men Tshirt")
+    assert cart_page.are_products_in_cart(
+        products[0]["name"],
+        products[1]["name"]
+    )
+    
+def test_tc13(home_page: HomePage) -> None:
+    """TC-13. Verify Product quantity in Cart"""
     

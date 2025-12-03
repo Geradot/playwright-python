@@ -8,7 +8,7 @@ def base_url() -> str:
 @pytest.fixture(scope="session")
 def browser_context():
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=True, timeout=60_000)
+        browser = pw.chromium.launch(headless=True)
         context = browser.new_context()
         yield context
         context.close()
