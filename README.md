@@ -156,4 +156,3 @@ Test data is managed through YAML files in the `data/` directory and loaded via 
 
 - Easy data maintenance
 - Separation of test logic and test data
-- Support for multiple user profiles and test scenarios
