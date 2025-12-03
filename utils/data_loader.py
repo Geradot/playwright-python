@@ -70,10 +70,6 @@ class DataLoader:
         Returns:
             List of product dictionaries
         """
-        # products.yml has a direct list
-        # products = self._data.get('products', [])
-        # If it's not a list but a dictionary, return an empty list
-        # return products if isinstance(products, list) else []
         return self._data.get('products', [])
     
     def get_product(self, product_id: int) -> Dict[str, Any]:

@@ -85,7 +85,7 @@ class BasePage:
         self.logout_link.click()
     
     def signup_flow(self) -> "HomePage":
-        """Register a new user, add details, and delete the account."""
+        """Standard flow of registering a new user"""
         auth_page = self.open_auth_page()
         signup_page = auth_page.signup_new_user(self.registration_email, password=self.registration_password)
         account_created_page = signup_page.create_account()

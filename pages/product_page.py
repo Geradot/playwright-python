@@ -11,6 +11,14 @@ class ProductPage(BasePage):
         self.product_name = self.page.locator(".product-details").get_by_role("heading", level=2)
         self.product_category = self.page.locator(".product-details").get_by_text(re.compile("Category:"))
         self.product_price = self.page.locator(".product-details").get_by_text(re.compile("Rs."))
+        self.quantity_input = self.page.locator("#quantity")
         self.product_availability = self.page.locator(".product-details").get_by_text(re.compile("Availability:"))
         self.product_condition = self.page.locator(".product-details").get_by_text(re.compile("Condition:"))
         self.product_brand = self.page.locator(".product-details").get_by_text(re.compile("Brand:"))
+        self.add_to_cart_btn = self.page.get_by_role("button", name="Add to cart")
+
+    def set_quantity(self, quantity: int) -> None:
+        self.quantity_input.fill(str(quantity))
+        
+    def add_to_cart(self) -> None:
+        self.add_to_cart_btn.click()
